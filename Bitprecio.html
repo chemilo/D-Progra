@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Precio de Bitcoin en Tiempo Real</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<h1>Precio de Bitcoin en Tiempo Real</h1>
+<div id="bitcoin-price"></div>
+
+<script>
+$(document).ready(function(){
+    function obtenerPrecioBitcoin() {
+        $.ajax({
+            url: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd',
+            type: 'GET',
+            success: function(data) {
+                var precio = data.bitcoin.usd;
+                $('#bitcoin-price').text('Precio de Bitcoin: $' + precio);
+            },
+            error: function() {
+                $('#bitcoin-price').text('Error al obtener el precio de Bitcoin');
+            }
+        });
+    }
+
+    obtenerPrecioBitcoin();
+    setInterval(obtenerPrecioBitcoin, 5000); // Actualizar cada 5 segundos
+});
+</script>
+</body>
+</html>

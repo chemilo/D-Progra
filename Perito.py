@@ -1,0 +1,6 @@
+print("Hola Mundo")
+a = int(input("ingrese un numero: "))
+b = int(input("ingrese un numero: "))
+print(a*b)
+print("Texto agregado desde Vim \n no es buena opcion")
+print("Texto agregado com nano \n excelente opción mucho mas intuitiva")

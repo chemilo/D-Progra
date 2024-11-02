@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Escáner de Códigos de Barras</title>
+  <style>
+    #scanner-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    #scanner-container video {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div id="scanner-container">
+    <video id="scanner-video" playsinline></video>
+    <br>
+    <button id="finalizar-btn" disabled>Finalizar</button>
+  </div>
+
+  <script src="https://unpkg.com/@zxing/library@latest"></script>
+  <script>
+    const codeReader = new ZXing.BrowserMultiFormatReader();
+    const videoElement = document.getElementById('scanner-video');
+    const finalizarBtn = document.getElementById('finalizar-btn');
+    let escaneados = [];
+
+    codeReader.decodeFromVideoDevice(undefined, 'scanner-video', (result, err) => {
+      if (result) {
+        escaneados.push(result.text);
+        console.log(result.text);
+      }
+      if (err) {
+        console.error(err);
+      }
+    }).then((result) => {
+      videoElement.srcObject = result;
+      videoElement.play();
+      finalizarBtn.disabled = false;
+    });
+
+    finalizarBtn.addEventListener('click', () => {
+      const csvContent = "data:text/csv;charset=utf-8," + escaneados.join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "codigos_escaneados.csv");
+      document.body.appendChild(link);
+      link.click();
+    });
+  </script>
+</body>
+</html>
